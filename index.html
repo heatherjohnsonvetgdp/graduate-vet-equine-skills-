@@ -1,0 +1,1536 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AAEP Equine Clinical Skills Competency Checklist</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        aaep: {
+                            navy: '#0f294a',
+                            slate: '#1e3a5f',
+                            accent: '#2563eb'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Print styles */
+        @media print {
+            body {
+                background-color: #ffffff !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .print-break-inside-avoid {
+                break-inside: avoid;
+            }
+            .shadow-sm, .shadow-md, .shadow-lg {
+                box-shadow: none !important;
+            }
+            .border {
+                border-color: #cbd5e1 !important;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation & Executive Header (Scrollable on mobile) -->
+    <header class="bg-aaep-navy text-white shadow-md z-30 no-print">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4">
+                <!-- Brand & Title -->
+                <div class="flex items-start sm:items-center gap-2.5 sm:gap-3">
+                    <div class="bg-white/10 p-2 sm:p-2.5 rounded-xl border border-white/15 shrink-0">
+                        <i data-lucide="stethoscope" class="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                            <h1 class="text-base sm:text-xl font-bold tracking-tight text-white">Equine Clinical Skills Competency Framework</h1>
+                            <span class="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-200 border border-blue-400/30">AAEP Rev. July 2024</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Self-Directed Competency Verification & Asynchronous Mentorship Tracker</p>
+                    </div>
+                </div>
+
+                <!-- Clinician & Mentor Metadata Controls -->
+                <div class="grid grid-cols-3 gap-2 bg-white/5 p-2 rounded-xl border border-white/10 sm:flex sm:flex-wrap sm:items-center sm:gap-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 px-1 sm:px-2">
+                        <span class="text-[10px] sm:text-xs text-slate-400">Clinician:</span>
+                        <input type="text" id="clinicianName" value="Heather" aria-label="Clinician Name"
+                            class="bg-transparent border-b border-white/30 focus:border-emerald-400 text-xs sm:text-sm font-medium text-white w-full sm:w-24 focus:outline-none px-1 py-0.5">
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 px-1 sm:px-2">
+                        <span class="text-[10px] sm:text-xs text-slate-400">Mentor:</span>
+                        <input type="text" id="mentorName" value="Ryan" aria-label="Mentor Name"
+                            class="bg-transparent border-b border-white/30 focus:border-emerald-400 text-xs sm:text-sm font-medium text-white w-full sm:w-24 focus:outline-none px-1 py-0.5">
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-1 px-1 sm:px-2">
+                        <span class="text-[10px] sm:text-xs text-slate-400">Review Date:</span>
+                        <input type="date" id="reviewDate" aria-label="Review Date"
+                            class="bg-transparent border-b border-white/30 focus:border-emerald-400 text-[11px] sm:text-sm font-medium text-white focus:outline-none px-1 py-0.5 [color-scheme:dark] w-full">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Toolbar & Tabs -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-3 pt-3 border-t border-white/10">
+                <!-- View Switcher Tabs -->
+                <div class="grid grid-cols-3 gap-1 sm:flex sm:items-center bg-slate-900/50 p-1 rounded-xl border border-white/10">
+                    <button onclick="switchTab('checklist')" id="tab-checklist"
+                        class="flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all bg-white text-aaep-navy shadow-sm">
+                        <i data-lucide="check-square" class="w-4 h-4 shrink-0"></i>
+                        <span>Skills</span>
+                    </button>
+                    <button onclick="switchTab('analytics')" id="tab-analytics"
+                        class="flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-slate-300 hover:text-white">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 shrink-0"></i>
+                        <span>Analytics</span>
+                    </button>
+                    <button onclick="switchTab('report')" id="tab-report"
+                        class="flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all text-slate-300 hover:text-white">
+                        <i data-lucide="file-text" class="w-4 h-4 shrink-0"></i>
+                        <span>Summary</span>
+                    </button>
+                </div>
+
+                <!-- Data & Export Controls -->
+                <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap overflow-x-auto pb-1 sm:pb-0">
+                    <button onclick="loadDemoSample()" title="Populate sample ratings to preview analytics"
+                        class="flex items-center gap-1 px-2.5 py-2 sm:py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-slate-200 transition-colors border border-white/10 shrink-0">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i>
+                        <span>Load Sample</span>
+                    </button>
+                    <button onclick="exportCSV()"
+                        class="flex items-center gap-1 px-2.5 py-2 sm:py-1.5 rounded-lg text-xs font-medium bg-emerald-600 hover:bg-emerald-500 text-white transition-colors shadow-sm shrink-0">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                        <span>CSV</span>
+                    </button>
+                    <button onclick="exportJSON()"
+                        class="flex items-center gap-1 px-2.5 py-2 sm:py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white transition-colors border border-white/10 shrink-0">
+                        <i data-lucide="save" class="w-3.5 h-3.5"></i>
+                        <span>Backup</span>
+                    </button>
+                    <label class="flex items-center gap-1 px-2.5 py-2 sm:py-1.5 rounded-lg text-xs font-medium bg-white/10 hover:bg-white/20 text-white transition-colors border border-white/10 cursor-pointer shrink-0">
+                        <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                        <span>Restore</span>
+                        <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importJSON(event)">
+                    </label>
+                    <button onclick="openResetModal()" title="Clear all ratings and notes"
+                        class="flex items-center gap-1 px-2.5 py-2 sm:py-1.5 rounded-lg text-xs font-medium bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 transition-colors border border-rose-400/20 shrink-0">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none no-print"></div>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- KPI Summary Cards -->
+        <section aria-label="Progress Overview" class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-6">
+            <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between text-slate-500 mb-1">
+                    <span class="text-xs font-semibold uppercase tracking-wider">AAEP Benchmarks</span>
+                    <i data-lucide="layers" class="w-4 h-4 text-slate-400"></i>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span id="kpi-total" class="text-2xl sm:text-3xl font-bold text-slate-900">0</span>
+                    <span id="kpi-rated-sub" class="text-xs text-slate-500 font-medium">0 rated</span>
+                </div>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2.5 overflow-hidden">
+                    <div id="kpi-rated-bar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 border border-emerald-200/80 shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between text-emerald-700 mb-1">
+                    <span class="text-xs font-semibold uppercase tracking-wider">Green (Independent)</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span id="kpi-green" class="text-2xl sm:text-3xl font-bold text-emerald-700">0</span>
+                    <span id="kpi-green-pct" class="text-xs font-semibold text-emerald-600">0%</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-2">Ready for autonomous practice</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 border border-amber-200/80 shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between text-amber-700 mb-1">
+                    <span class="text-xs font-semibold uppercase tracking-wider">Amber (Supervised)</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span id="kpi-amber" class="text-2xl sm:text-3xl font-bold text-amber-700">0</span>
+                    <span id="kpi-amber-pct" class="text-xs font-semibold text-amber-600">0%</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-2">Targeted observation requested</p>
+            </div>
+
+            <div class="bg-white rounded-2xl p-4 border border-rose-200/80 shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between text-rose-700 mb-1">
+                    <span class="text-xs font-semibold uppercase tracking-wider">Red (Observing)</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span id="kpi-red" class="text-2xl sm:text-3xl font-bold text-rose-700">0</span>
+                    <span id="kpi-red-pct" class="text-xs font-semibold text-rose-600">0%</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-2">Review & guided demonstration</p>
+            </div>
+
+            <div class="col-span-2 lg:col-span-1 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col justify-between">
+                <div class="flex items-center justify-between text-slate-600 mb-1">
+                    <span class="text-xs font-semibold uppercase tracking-wider">Mean Likert Score</span>
+                    <i data-lucide="trending-up" class="w-4 h-4 text-blue-600"></i>
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                    <span id="kpi-likert" class="text-2xl sm:text-3xl font-bold text-slate-900">—</span>
+                    <span class="text-xs text-slate-400 font-medium">/ 5.0</span>
+                </div>
+                <p id="kpi-notes-count" class="text-[11px] text-slate-500 mt-2">0 case reflection notes logged</p>
+            </div>
+        </section>
+
+        <!-- VIEW 1: INTERACTIVE SKILLS CHECKLIST -->
+        <div id="view-checklist" class="space-y-4 sm:space-y-5">
+            
+            <!-- Rating Scale Legend Banner -->
+            <div class="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-sm no-print">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4">
+                    <div class="space-y-1">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Dual Competency Calibration Key</h2>
+                        <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-slate-700">
+                            <span class="inline-flex items-center gap-1.5 font-medium">
+                                <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+                                <strong>Green:</strong> Confident / Independent
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 font-medium">
+                                <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+                                <strong>Amber:</strong> Needs Supervision
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 font-medium">
+                                <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+                                <strong>Red:</strong> Observing / Needs Review
+                            </span>
+                        </div>
+                    </div>
+                    <div class="lg:border-l lg:border-slate-200 lg:pl-5 space-y-1">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Likert Confidence Scale (1–5)</h2>
+                        <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] text-slate-600">
+                            <span><strong class="text-slate-800">1:</strong> Observing</span>
+                            <span>•</span>
+                            <span><strong class="text-slate-800">2:</strong> Guided</span>
+                            <span>•</span>
+                            <span><strong class="text-slate-800">3:</strong> Supervised</span>
+                            <span>•</span>
+                            <span><strong class="text-slate-800">4:</strong> Independent</span>
+                            <span>•</span>
+                            <span><strong class="text-slate-800">5:</strong> Mastery</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search & Filter Controls -->
+            <div class="bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200 shadow-sm space-y-3 no-print">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 sm:gap-3">
+                    <div class="lg:col-span-5 relative">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                        <input type="text" id="searchInput" placeholder="Search 240+ AAEP skills, procedures, or notes..."
+                            class="w-full pl-10 pr-9 py-2.5 sm:py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <div class="lg:col-span-3">
+                        <select id="categoryFilter" aria-label="Filter by Category"
+                            class="w-full px-3 py-2.5 sm:py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                            <option value="all">All 17 Clinical Categories</option>
+                        </select>
+                    </div>
+
+                    <div class="lg:col-span-2">
+                        <select id="statusFilter" aria-label="Filter by Traffic Light Status"
+                            class="w-full px-3 py-2.5 sm:py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                            <option value="all">All Statuses</option>
+                            <option value="green">🟢 Green (Independent)</option>
+                            <option value="amber">🟡 Amber (Supervised)</option>
+                            <option value="red">🔴 Red (Observing)</option>
+                            <option value="unrated">⚪ Unrated</option>
+                            <option value="has-notes">📝 Has Reflection Notes</option>
+                        </select>
+                    </div>
+
+                    <div class="lg:col-span-2">
+                        <select id="likertFilter" aria-label="Filter by Likert Score"
+                            class="w-full px-3 py-2.5 sm:py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                            <option value="all">All Likert Levels</option>
+                            <option value="5">Likert 5 (Mastery)</option>
+                            <option value="4">Likert 4 (Independent)</option>
+                            <option value="3">Likert 3 (Supervised)</option>
+                            <option value="2">Likert 2 (Guided)</option>
+                            <option value="1">Likert 1 (Observing)</option>
+                            <option value="unrated">Unscored</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-2 border-t border-slate-100">
+                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+                        <span class="text-xs font-medium text-slate-500 mr-1 shrink-0">Focus:</span>
+                        <button onclick="quickFilter('all')" id="pill-all"
+                            class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 text-white transition-colors shrink-0">
+                            All Skills
+                        </button>
+                        <button onclick="quickFilter('amber')" id="pill-amber"
+                            class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition-colors shrink-0">
+                            🎯 Request Supervision (Amber)
+                        </button>
+                        <button onclick="quickFilter('red')" id="pill-red"
+                            class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100 transition-colors shrink-0">
+                            📚 Review Priority (Red)
+                        </button>
+                        <button onclick="quickFilter('has-notes')" id="pill-has-notes"
+                            class="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-800 border border-blue-200 hover:bg-blue-100 transition-colors shrink-0">
+                            📋 Logged Evidence
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+                        <span id="visibleCountLabel" class="text-xs text-slate-500 font-medium">Showing all skills</span>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="toggleAllCategories(true)" class="text-xs font-medium text-blue-600 hover:text-blue-800 px-2 py-1 rounded hover:bg-blue-50">
+                                Expand All
+                            </button>
+                            <button onclick="toggleAllCategories(false)" class="text-xs font-medium text-slate-600 hover:text-slate-800 px-2 py-1 rounded hover:bg-slate-100">
+                                Collapse All
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Accordion Container -->
+            <div id="categoriesContainer" class="space-y-4"></div>
+
+            <!-- Empty State -->
+<!-- ... --></main>
+<!-- ... -->
+    <script>
+        const AAEP_SKILLS_DATA = [
+            {
+                id: "medical-knowledge",
+                title: "1. Medical Knowledge",
+                icon: "book-open",
+                skills: [
+                    "Gather a complete history from the person responsible for the horse",
+                    "Develop and understand a process for creating a problem list, diagnosing, and treating horses of various signalments",
+                    "Understand and convey accurate prognosis for common conditions",
+                    "Interpret CBC/Chemistry/Fibrinogen/SAA/lactate values and apply it to a clinical case",
+                    "Interpret results of abdominal fluid, synovial fluid, and arterial/venous blood gas analyses in the context of a clinical case",
+                    "Understand basic classes of antibiotics and how to appropriately apply them to treat a variety of infections; exercise appropriate antimicrobial stewardship with these selections",
+                    "Be familiar with common therapeutic medications in equine medicine and how to incorporate them into a medical plan for a patient",
+                    "Understand the limitations of field medicine and when it is appropriate to refer to a hospital setting",
+                    "Know how to perform a literature search to identify and fill knowledge gaps",
+                    "Know how to critically read and apply scientific papers to practice",
+                    "Know how to present a case to a colleague completely and succinctly"
+                ]
+            },
+            {
+                id: "preventive-medicine",
+                title: "2. Preventive Medicine",
+                icon: "shield-check",
+                skills: [
+                    "Understand and communicate core and risk-based vaccine and evidence based deworming protocols",
+                    "Determine fecal egg shedding status and recommend appropriate treatment to reduce pasture contamination",
+                    "Understand the FECRT (Fecal Egg Count Reduction Test)",
+                    "Understand and apply the basics of equine nutrition and body condition scoring to provide counsel to owners with dietary questions for healthy and diseased horses",
+                    "Understand and communicate information on routine dentals"
+                ]
+            },
+            {
+                id: "dentistry",
+                title: "3. Dentistry",
+                icon: "smile",
+                skills: [
+                    "Know the dental formula and tooth eruption timeline",
+                    "Estimate age based on dentition",
+                    "Perform a thorough dental examination and characterize common dental pathologies",
+                    "Perform occlusal equilibration",
+                    "Recognize clinical and radiographic signs of Equine Odontoclastic Tooth Resorption and Hypercementosis (EOTRH)",
+                    "Perform extraction of wolf teeth, persistent deciduous teeth and mobile teeth",
+                    "Obtain diagnostic radiographs of the incisor teeth, cheek teeth, and sinuses"
+                ]
+            },
+            {
+                id: "basic-examinations",
+                title: "4. Basic Examinations & Skills",
+                icon: "clipboard-check",
+                skills: [
+                    "Perform complete and efficient physical exams on adult equids utilizing knowledge of normal vital parameters",
+                    "Visually estimate weight and know how to use a weight tape",
+                    "Recognize and characterize heart rate and rhythm abnormalities, and murmurs",
+                    "Perform venipuncture from jugular, cephalic and lateral thoracic veins and facial sinus",
+                    "Administer intravenous, intramuscular, and subcutaneous medications",
+                    "Perform a regional limb perfusion of the forelimb and hindlimb, demonstrating appropriate tourniquet placement and knowledge of common medications utilized",
+                    "Place and secure an intravenous jugular catheter",
+                    "Pull a shoe efficiently without compromise of hoof wall integrity"
+                ]
+            },
+            {
+                id: "imaging",
+                title: "5. Imaging",
+                icon: "scan",
+                skills: [
+                    "Acquire and interpret diagnostic radiographs of the equine skeleton",
+                    "Appropriately interpret hoof measurements and make farrier recommendations",
+                    "Perform diagnostic ultrasound of the metacarpus/tarsus and diagnose injuries of the flexor tendon apparatus/suspensory ligament",
+                    "Perform and interpret thoracic ultrasonography of normal and diseased patients",
+                    "Understand the diagnostic value of advanced imaging modalities (MRI, CT, nuclear scintigraphy, PET, contrast radiography) and when to refer cases",
+                    "Acquire and interpret a full set of radiographs for horses to be sold at public auction or pre-purchase examination settings. Know necessary views, proper positioning, and the most common lesions of the young growing horse"
+                ]
+            },
+            {
+                id: "colic",
+                title: "6. Colic",
+                icon: "activity",
+                skills: [
+                    "Evaluate and manage an acute colic case",
+                    "Implement an appropriate sedation and analgesia plan",
+                    "Palpate per rectum and be able to recognize normal versus abnormal findings",
+                    "Perform nasogastric intubation, determine reflux status, and administer enteral medications if appropriate",
+                    "Secure and manage a nasogastric tube for short- or long-term intervals",
+                    "Perform a FLASH (Fast Localized Abdominal Sonography in the Horse) exam and interpret results",
+                    "Develop a fluid therapy plan",
+                    "Perform an abdominocentesis and understand when this is indicated and how to interpret the results of the fluid analysis",
+                    "Perform a cecal trocarization and understand when this is indicated",
+                    "Be able to categorize lesions into differential list: strangulating vs. non-strangulating vs. inflammatory and by anatomic location of large vs. small intestine vs. other based on clinical picture",
+                    "Understand diagnostic and treatment options for recurrent colic",
+                    "Understand importance of gastroscopy in the appropriate diagnosis and treatment of Equine Gastric Ulcer Syndrome (EGUS)"
+                ]
+            },
+            {
+                id: "surgery",
+                title: "7. Surgery",
+                icon: "scissors",
+                skills: [
+                    "Understand and employ basic surgical principles: gentle tissue handling, hemostasis, preservation of blood supply, asepsis, minimizing tissue tension, accurate tissue apposition, and obliteration of dead space",
+                    "Be familiar with a variety of suture types, suture patterns, and tension-relieving principles and techniques",
+                    "Know the basic principles of wound healing and wound management",
+                    "Appropriately select and place a drain for soft tissue wounds",
+                    "Be able to apply a variety of bandages; basic wound dressing, half limb, full limb, foot bandage, face bandage, tie-over bandage, sweat, standing wraps",
+                    "Perform a castration",
+                    "Repair a variety of skin lacerations including eyelid lacerations",
+                    "Perform a sinus trephination and lavage",
+                    "Provide aftercare including suture/staple removal",
+                    "Identify common surgical instrumentation and demonstrate proficient use",
+                    "Become familiar with indications for a variety of general, abdominal, and orthopedic surgical procedures",
+                    "Apply a cast to the foot and to the distal limb",
+                    "Recognize and manage potential cast complications (cast sores, breakage, etc.)",
+                    "Manage postoperative complications in the colic patient"
+                ]
+            },
+            {
+                id: "anesthesia",
+                title: "8. Anesthesia",
+                icon: "syringe",
+                skills: [
+                    "Be familiar with a variety of local and systemic anesthetic agents",
+                    "Understand principles of local and regional anesthesia for the purposes of laceration repair, lameness isolation, and ophthalmic evaluation",
+                    "Sedate adults and neonates for short- and long-term standing procedures",
+                    "Implement an anesthetic plan for general anesthetic procedures in field and hospital settings",
+                    "Be familiar with emergency drug doses and their appropriate use",
+                    "Use clinical observation to complete a pain score assessment",
+                    "Design a multi-modal pain management plan",
+                    "Place a caudal epidural for anesthesia of the perineum",
+                    "Know the mechanisms of action and doses for common analgesics and induction medications",
+                    "Be familiar with the basic emergency and reversal medications",
+                    "Assess and communicate a patient's pre-anesthesia medical comorbidities",
+                    "Set up and pressure check a closed rebreathing system with a mechanical ventilator if available within the practice",
+                    "Understand the basics of mechanical ventilation",
+                    "Be able to perform endotracheal, nasotracheal, and transtracheal intubation in adults and neonates",
+                    "Anesthetize a healthy patient with injectable and/or inhalant anesthesia when available within practice",
+                    "Prepare a critical patient for an anesthetic event",
+                    "Correctly place leads, record, and interpret ECGs",
+                    "Place facial and distal limb arterial lines for direct arterial blood pressure monitoring",
+                    "Properly position an anesthetized patient to prevent post-operative complications and understand management of post-operative complications if they arise",
+                    "Understand and apply the cardiac output equation in an anesthetized patient",
+                    "Be familiar with the benefits and drawbacks of free recovery, head-and-tail rope recovery, and sling recovery",
+                    "Secure head and tail ropes for recovery when appropriate"
+                ]
+            },
+            {
+                id: "reproduction",
+                title: "9. Reproduction",
+                icon: "heart-pulse",
+                skills: [
+                    "Instruct, and demonstrate to staff how to place proper restraint of a mare for reproductive evaluations",
+                    "Be able to palpate and ultrasound per rectum ovaries, uterus and cervix of a mare in all stages of repro cycle; interpret findings and identify an estrous or diestrus mare; identify a pregnant mare",
+                    "Understand the components of a breeding soundness exam with full diagnostics including physical exam, reproductive ultrasonography, cervical exam with a vaginal speculum, uterine culture and cytology, and uterine biopsy",
+                    "Know medications available to manipulate the estrus cycle for breeding purposes, including dose and administration timing basics",
+                    "Understand breeding schedules and differences in breeding with live cover, cooled-shipped and frozen semen",
+                    "Be familiar with management of donor and recipient mares for embryo transfer",
+                    "Be able to perform a complete ultrasound examination of the gravid uterus to evaluate twin status and fetal heartbeat",
+                    "Be familiar with fetal reduction techniques",
+                    "Determine fetal age based on ultrasonography at major landmarks during gestation",
+                    "Evaluate & identify the need for vulvoplasty (Caslick's); place a Caslick's; know how to remove a Caslick's for breeding or foaling",
+                    "Diagnose and manage a mare with placentitis",
+                    "Understand process for appropriate stallion collection in phantom and live mare settings",
+                    "Demonstrate appropriate semen handling and evaluation of sperm motility and morphology",
+                    "Determine a proper insemination dose",
+                    "Be familiar with a variety of semen extenders and preparation of semen for cooled transport and frozen storage",
+                    "Infuse a uterus with either semen or antibiotics",
+                    "Know how to sedate a stallion for reproductive exams",
+                    "Identify and palpate normal testicles. Know anatomy and normal position in the scrotum",
+                    "Identify a cryptorchid",
+                    "Know how to perform ultrasonography and measure testicles to calculate daily spermatic output",
+                    "Perform a post-foaling examination (mare)",
+                    "Perform a uterine lavage",
+                    "Evaluate and treat a mare with a retained placenta",
+                    "Know anatomical sites to swab for CEM in an imported mare",
+                    "Know anatomical sites to swab for CEM and regular stallion breeding cultures"
+                ]
+            },
+            {
+                id: "internal-medicine",
+                title: "10. Internal Medicine",
+                icon: "thermometer",
+                skills: [
+                    "Identify risk factors and discuss diagnostic and management plan for Equine Metabolic Syndrome (EMS)/Insulin Dysregulation (ID)",
+                    "Identify risk factors and discuss diagnostic and management plan for PPID (Pituitary Pars Intermedia Dysfunction)",
+                    "Establish a diagnostic and treatment plan for equine asthma",
+                    "Establish a diagnostic, treatment, and quarantine plan for infectious respiratory disease",
+                    "Establish a diagnostic, treatment, and quarantine plan for diarrhea",
+                    "Establish a diagnostic and treatment plan for chronic weight loss",
+                    "Establish a diagnostic and treatment plan for reduced performance",
+                    "Perform an abdominal ultrasound and identify major abdominal organs",
+                    "Discuss testing for genetic diseases",
+                    "Perform additional diagnostics for a fever of unknown origin",
+                    "Perform a trans-tracheal wash (TTW) and a bronchoalveolar lavage (BAL) and understand when each is an appropriate diagnostic choice",
+                    "Place chest tube to drain pleural effusion",
+                    "Perform upper airway endoscopy including guttural pouch examination and lavage",
+                    "Perform a neurologic exam, provide basic neuroanatomical localization, and assign neurologic grade",
+                    "Safely manage the acutely neurologic horse",
+                    "Recognize, diagnose, and manage a variety of myopathies",
+                    "Perform skin scraping, skin surface cytology, and a variety of skin biopsy techniques",
+                    "Know the diagnostic techniques for an allergic horse",
+                    "Discuss a variety of treatment options for common skin tumors"
+                ]
+            },
+            {
+                id: "neonatology",
+                title: "11. Neonatology",
+                icon: "baby",
+                skills: [
+                    "Perform a healthy foal exam and describe appropriate umbilical care and monitoring",
+                    "Know the normal developmental markers of a neonate and when to intervene",
+                    "Perform a foal sepsis score and implement treatment or stabilization and referral accordingly",
+                    "Interpret foal IgG levels and know when treatment is indicated for failure of passive transfer",
+                    "Know the emergency resuscitation medications available for neonates and understand the fundamental principles of cardiopulmonary resuscitation (CPR)",
+                    "Know how to utilize oxygen therapy and mechanical ventilation when available",
+                    "Diagnose and manage a foal with fractured ribs",
+                    "Be familiar with therapies for neonatal encephalopathy",
+                    "Place a nasogastric feeding tube and calculate energy requirements",
+                    "Be familiar with acid-base and electrolyte disturbances and understand treatment options",
+                    "Understand indication for and complications associated with partial or total parenteral nutrition of a sick neonate",
+                    "Develop a diagnostic and treatment plan for colic in neonates and foals",
+                    "Develop a diagnostic and treatment plan for neonatal diarrhea",
+                    "Diagnose and treat tendon contracture and laxity",
+                    "Diagnose angular limb deformity and know closure times of physeal plates",
+                    "Diagnose and understand treatment options for septic arthritis",
+                    "Diagnose and manage umbilical infections and herniations; understand indications for surgical management",
+                    "Develop a vaccination and deworming program for the growing foal",
+                    "Manage an orphan foal and be familiar with foal grafting techniques"
+                ]
+            },
+            {
+                id: "lameness-sports-medicine",
+                title: "12. Lameness & Sport Medicine",
+                icon: "footprints",
+                skills: [
+                    "Obtain accurate and pertinent history for a horse presenting for lameness or performance issues",
+                    "Perform a lameness exam and assign a lameness grade",
+                    "Apply specific nerve blocks, know the structures they anesthetize and their limitations: palmar digital nerve block, abaxial nerve block, low 4-point nerve block, proximal metacarpal/tarsal region blocks",
+                    "Be familiar with approaches for intra-articular anesthesia and how they affect lameness diagnostics",
+                    "Understand and implement treatment plan for common causes of lameness such as navicular disease, osteoarthritis, and trauma",
+                    "Understand spectrum of lameness management options including nutrition, weight control, exercise limitations, pain control, and medical interventions",
+                    "Diagnose, treat, and manage laminitis including exploration of underlying etiology",
+                    "Understand the use of intra-articular injections and differentiate the range of products available from different pharmacologic classes with varying levels of evidence",
+                    "Understand the mechanism of action and application of orthobiologic products",
+                    "Understand indication, use, and side effects of bisphosphonate medications",
+                    "Understand drug withdrawal periods/detection times for performance horses, have knowledge of their implications on treatment options, and know where to find up-to-date information",
+                    "Participate in a complete pre-purchase examination and have familiarity with writing a pre-purchase report",
+                    "Be familiar with gait analysis technologies"
+                ]
+            },
+            {
+                id: "emergency-critical-care",
+                title: "13. Emergency & Critical Care",
+                icon: "siren",
+                skills: [
+                    "Triage cases in order of most to least time-sensitive",
+                    "Demonstrate empathy and calm decision-making in high-intensity, high-pressure emergency situations",
+                    "Triage a colic case in the field and determine if referral is indicated",
+                    "Evaluate, treat, and manage a choke case",
+                    "Know how to identify and treat a \"red bag\" delivery",
+                    "Evaluate a dystocia, understand the importance of timely referral and timeline for foal viability and mare survival, and be able to communicate this to a client",
+                    "Discuss and implement biosecurity plans for an infectious disease outbreak",
+                    "Be able to utilize multiple euthanasia techniques",
+                    "Understand large animal rescue techniques and safely manage a team of lay people",
+                    "Perform arthrocentesis on commonly affected synovial structures",
+                    "Understand the basics of fracture stabilization, and be able to apply a bandage, Kimzey, PVC splints, or bivalve cast splints",
+                    "Evaluate and treat acute hemorrhage in the field and in cases of periparturient hemorrhage",
+                    "Diagnose and treat allergic reactions/anaphylaxis",
+                    "Know how to localize, lance and appropriately manage a hoof abscess",
+                    "Know the indications for blood transfusion",
+                    "Calculate and apply shock and maintenance fluid therapy in adults and foals",
+                    "Recognize the signs of endotoxemic shock in the equine patient",
+                    "Perform a tracheostomy and discuss management of a trach-tube",
+                    "Safely manage a down horse",
+                    "Medically treat an actively seizing horse"
+                ]
+            },
+            {
+                id: "husbandry",
+                title: "14. Husbandry Techniques",
+                icon: "shield",
+                skills: [
+                    "Correctly restrain a foal and an adult horse",
+                    "Tie a quick release knot",
+                    "Apply a lip and neck twitch",
+                    "Safely pick up, clean, and examine the forelimbs and hindlimbs",
+                    "Demonstrate appropriate lunging techniques",
+                    "Advise handler on safe and appropriate positioning while veterinarian is performing procedures"
+                ]
+            },
+            {
+                id: "business",
+                title: "15. Business of Veterinary Medicine",
+                icon: "briefcase",
+                skills: [
+                    "Maintain complete and concise records",
+                    "Develop accurate estimates and charge appropriately for work performed",
+                    "Understand basic financial management in practice",
+                    "Understand how gross production factors into salary",
+                    "Read an employment contract thoroughly and understand benefits",
+                    "Manage a team of coworkers and effectively utilize staff"
+                ]
+            },
+            {
+                id: "ophthalmology",
+                title: "16. Ophthalmology",
+                icon: "eye",
+                skills: [
+                    "Perform a complete ophthalmic exam using local anesthetic techniques and determine appropriate initial treatment plan",
+                    "Perform auriculopalpebral and supraorbital nerve blocks, and understand technique and indication for retrobulbar blocks",
+                    "Perform a nasolacrimal duct flush",
+                    "Understand the difference in plan for a complicated versus superficial corneal ulcer",
+                    "Know the normal intraocular pressure and tear production values and associated tests",
+                    "Collect samples for culture and cytology from a corneal ulceration",
+                    "Place a subpalpebral lavage system",
+                    "Perform a simple corneal debridement",
+                    "Manage a case of equine recurrent uveitis",
+                    "Diagnose and treat a stromal abscess",
+                    "Recognize indications for enucleation",
+                    "Recognize common neoplasms of the eye and adnexa",
+                    "Perform transpalpebral ultrasonography of the eye",
+                    "Understand indications for and placement of temporary tarsorrhaphy"
+                ]
+            },
+            {
+                id: "regulatory",
+                title: "17. Regulatory",
+                icon: "file-check-2",
+                skills: [
+                    "Complete a Certificate of Veterinary Inspection (CVI) for domestic and international movement",
+                    "Complete Coggins paperwork",
+                    "Know who to contact when you suspect or diagnose a reportable disease",
+                    "Understand the differences between drugs approved by the FDA, compounded medications, veterinary medical devices, and supplements and the liability associated with use of each",
+                    "Understand and demonstrate proper record keeping, disposal, and use of DEA controlled drugs"
+                ]
+            }
+        ];
+
+        const STORAGE_KEY = 'aaep_equine_competency_v1';
+
+        let appState = {
+            meta: {
+                clinician: 'Heather',
+                mentor: 'Ryan',
+                date: new Date().toISOString().split('T')[0]
+            },
+            skills: {},
+            collapsedCategories: {}
+        };
+
+        let activeTab = 'checklist';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            populateCategoryDropdown();
+            bindMetaInputs();
+            bindFilterInputs();
+            renderAll();
+            lucide.createIcons();
+        });
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed.meta) appState.meta = { ...appState.meta, ...parsed.meta };
+                    if (parsed.skills) appState.skills = parsed.skills;
+                    if (parsed.collapsedCategories) appState.collapsedCategories = parsed.collapsedCategories;
+                }
+            } catch (err) {
+                console.error('Failed to load state from localStorage:', err);
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+            } catch (err) {
+                console.error('Failed to save state to localStorage:', err);
+                showToast('Unable to save locally—storage quota may be full.', 'error');
+            }
+        }
+
+        function bindMetaInputs() {
+            const clinicianInput = document.getElementById('clinicianName');
+            const mentorInput = document.getElementById('mentorName');
+            const dateInput = document.getElementById('reviewDate');
+
+            clinicianInput.value = appState.meta.clinician || 'Heather';
+            mentorInput.value = appState.meta.mentor || 'Ryan';
+            dateInput.value = appState.meta.date || new Date().toISOString().split('T')[0];
+
+            clinicianInput.addEventListener('input', (e) => {
+                appState.meta.clinician = e.target.value;
+                saveState();
+                updateReportMeta();
+            });
+            mentorInput.addEventListener('input', (e) => {
+                appState.meta.mentor = e.target.value;
+                saveState();
+                updateReportMeta();
+            });
+            dateInput.addEventListener('change', (e) => {
+                appState.meta.date = e.target.value;
+                saveState();
+                updateReportMeta();
+            });
+        }
+
+        function populateCategoryDropdown() {
+            const select = document.getElementById('categoryFilter');
+            AAEP_SKILLS_DATA.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat.id;
+                opt.textContent = `${cat.title} (${cat.skills.length})`;
+                select.appendChild(opt);
+            });
+        }
+
+        function bindFilterInputs() {
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+
+            searchInput.addEventListener('input', () => {
+                clearBtn.classList.toggle('hidden', searchInput.value.length === 0);
+                renderChecklist();
+            });
+
+            document.getElementById('categoryFilter').addEventListener('change', renderChecklist);
+            document.getElementById('statusFilter').addEventListener('change', () => {
+                syncQuickPills();
+                renderChecklist();
+            });
+            document.getElementById('likertFilter').addEventListener('change', renderChecklist);
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = '';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            renderChecklist();
+        }
+
+        function quickFilter(status) {
+            document.getElementById('statusFilter').value = status;
+            syncQuickPills();
+            renderChecklist();
+        }
+
+        function syncQuickPills() {
+            const current = document.getElementById('statusFilter').value;
+            ['all', 'amber', 'red', 'has-notes'].forEach(p => {
+                const el = document.getElementById(`pill-${p}`);
+                if (!el) return;
+                if (current === p) {
+                    el.classList.add('ring-2', 'ring-offset-1', 'ring-blue-500');
+                } else {
+                    el.classList.remove('ring-2', 'ring-offset-1', 'ring-blue-500');
+                }
+            });
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            document.getElementById('categoryFilter').value = 'all';
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('likertFilter').value = 'all';
+            syncQuickPills();
+            renderChecklist();
+        }
+
+        function getSkillId(catId, idx) {
+            return `${catId}__${idx}`;
+        }
+
+        function getSkillData(skillId) {
+            return appState.skills[skillId] || { traffic: 'unrated', likert: null, note: '' };
+        }
+
+        function setTrafficLight(skillId, status) {
+            const current = getSkillData(skillId);
+            const nextStatus = current.traffic === status ? 'unrated' : status;
+            appState.skills[skillId] = {
+                ...current,
+                traffic: nextStatus,
+                updatedAt: new Date().toISOString()
+            };
+            saveState();
+            updateKPIs();
+            updateSkillRowUI(skillId);
+            updateCategoryHeaderStats(skillId.split('__')[0]);
+        }
+
+        function setLikert(skillId, score) {
+            const current = getSkillData(skillId);
+            const nextScore = current.likert === score ? null : score;
+            appState.skills[skillId] = {
+                ...current,
+                likert: nextScore,
+                updatedAt: new Date().toISOString()
+            };
+            saveState();
+            updateKPIs();
+            updateSkillRowUI(skillId);
+            updateCategoryHeaderStats(skillId.split('__')[0]);
+        }
+
+        function updateNote(skillId, text) {
+            const current = getSkillData(skillId);
+            appState.skills[skillId] = {
+                ...current,
+                note: text,
+                updatedAt: new Date().toISOString()
+            };
+            saveState();
+            updateKPIs();
+            updateSkillNoteIndicator(skillId);
+        }
+
+        function toggleNoteDrawer(skillId) {
+            const drawer = document.getElementById(`note-drawer-${skillId}`);
+            if (!drawer) return;
+            const isHidden = drawer.classList.contains('hidden');
+            drawer.classList.toggle('hidden');
+            if (isHidden) {
+                const textarea = drawer.querySelector('textarea');
+                if (textarea) textarea.focus();
+            }
+        }
+
+        function toggleCategory(catId) {
+            appState.collapsedCategories[catId] = !appState.collapsedCategories[catId];
+            saveState();
+            const body = document.getElementById(`cat-body-${catId}`);
+            const chevron = document.getElementById(`cat-chevron-${catId}`);
+            if (body && chevron) {
+                const isCollapsed = appState.collapsedCategories[catId];
+                body.classList.toggle('hidden', isCollapsed);
+                chevron.style.transform = isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+            }
+        }
+
+        function toggleAllCategories(expand) {
+            AAEP_SKILLS_DATA.forEach(cat => {
+                appState.collapsedCategories[cat.id] = !expand;
+            });
+            saveState();
+            renderChecklist();
+        }
+
+        function switchTab(tabName) {
+            activeTab = tabName;
+            ['checklist', 'analytics', 'report'].forEach(t => {
+                const view = document.getElementById(`view-${t}`);
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === tabName) {
+                    view.classList.remove('hidden');
+                    btn.classList.add('bg-white', 'text-aaep-navy', 'shadow-sm');
+                    btn.classList.remove('text-slate-300', 'hover:text-white');
+                } else {
+                    view.classList.add('hidden');
+                    btn.classList.remove('bg-white', 'text-aaep-navy', 'shadow-sm');
+                    btn.classList.add('text-slate-300', 'hover:text-white');
+                }
+            });
+
+            if (tabName === 'analytics') renderAnalytics();
+            if (tabName === 'report') renderReportView();
+            lucide.createIcons();
+        }
+
+        function renderAll() {
+            updateKPIs();
+            renderChecklist();
+            if (activeTab === 'analytics') renderAnalytics();
+            if (activeTab === 'report') renderReportView();
+        }
+
+        function updateKPIs() {
+            let totalSkills = 0;
+            let greenCount = 0;
+            let amberCount = 0;
+            let redCount = 0;
+            let likertSum = 0;
+            let likertCount = 0;
+            let notesCount = 0;
+            const ratedAny = new Set();
+
+            AAEP_SKILLS_DATA.forEach(cat => {
+                cat.skills.forEach((_, idx) => {
+                    totalSkills++;
+                    const id = getSkillId(cat.id, idx);
+                    const data = getSkillData(id);
+                    if (data.traffic === 'green') greenCount++;
+                    else if (data.traffic === 'amber') amberCount++;
+                    else if (data.traffic === 'red') redCount++;
+
+                    if (data.traffic !== 'unrated' || data.likert !== null) ratedAny.add(id);
+
+                    if (data.likert !== null && data.likert !== undefined) {
+                        likertSum += Number(data.likert);
+                        likertCount++;
+                    }
+                    if (data.note && data.note.trim().length > 0) {
+                        notesCount++;
+                    }
+                });
+            });
+
+            const totalRated = ratedAny.size;
+            const ratedPct = totalSkills > 0 ? Math.round((totalRated / totalSkills) * 100) : 0;
+            const greenPct = totalSkills > 0 ? Math.round((greenCount / totalSkills) * 100) : 0;
+            const amberPct = totalSkills > 0 ? Math.round((amberCount / totalSkills) * 100) : 0;
+            const redPct = totalSkills > 0 ? Math.round((redCount / totalSkills) * 100) : 0;
+            const meanLikert = likertCount > 0 ? (likertSum / likertCount).toFixed(1) : '—';
+
+            document.getElementById('kpi-total').textContent = totalSkills;
+            document.getElementById('kpi-rated-sub').textContent = `${totalRated} calibrated (${ratedPct}%)`;
+            document.getElementById('kpi-rated-bar').style.width = `${ratedPct}%`;
+
+            document.getElementById('kpi-green').textContent = greenCount;
+            document.getElementById('kpi-green-pct').textContent = `${greenPct}%`;
+
+            document.getElementById('kpi-amber').textContent = amberCount;
+            document.getElementById('kpi-amber-pct').textContent = `${amberPct}%`;
+
+            document.getElementById('kpi-red').textContent = redCount;
+            document.getElementById('kpi-red-pct').textContent = `${redPct}%`;
+
+            document.getElementById('kpi-likert').textContent = meanLikert;
+            document.getElementById('kpi-notes-count').textContent = `${notesCount} case reflection note${notesCount === 1 ? '' : 's'} logged`;
+        }
+
+        function renderChecklist() {
+            const container = document.getElementById('categoriesContainer');
+            const emptyState = document.getElementById('emptyState');
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+            const selectedCat = document.getElementById('categoryFilter').value;
+            const selectedStatus = document.getElementById('statusFilter').value;
+            const selectedLikert = document.getElementById('likertFilter').value;
+
+            let html = '';
+            let visibleSkillsTotal = 0;
+
+            AAEP_SKILLS_DATA.forEach(cat => {
+                if (selectedCat !== 'all' && cat.id !== selectedCat) return;
+
+                const matchedSkills = [];
+                cat.skills.forEach((skillText, idx) => {
+                    const id = getSkillId(cat.id, idx);
+                    const data = getSkillData(id);
+
+                    if (searchTerm) {
+                        const inSkill = skillText.toLowerCase().includes(searchTerm);
+                        const inNote = (data.note || '').toLowerCase().includes(searchTerm);
+                        const inCat = cat.title.toLowerCase().includes(searchTerm);
+                        if (!inSkill && !inNote && !inCat) return;
+                    }
+
+                    if (selectedStatus !== 'all') {
+                        if (selectedStatus === 'has-notes') {
+                            if (!data.note || data.note.trim().length === 0) return;
+                        } else if (data.traffic !== selectedStatus) {
+                            return;
+                        }
+                    }
+
+                    if (selectedLikert !== 'all') {
+                        if (selectedLikert === 'unrated') {
+                            if (data.likert !== null && data.likert !== undefined) return;
+                        } else if (Number(data.likert) !== Number(selectedLikert)) {
+                            return;
+                        }
+                    }
+
+                    matchedSkills.push({ id, idx, text: skillText, data });
+                });
+
+                if (matchedSkills.length === 0) return;
+                visibleSkillsTotal += matchedSkills.length;
+
+                const stats = getCategoryStats(cat);
+                const isCollapsed = !!appState.collapsedCategories[cat.id];
+
+                html += `
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all" id="cat-card-${cat.id}">
+                    <button type="button" onclick="toggleCategory('${cat.id}')"
+                        class="w-full px-4 sm:px-6 py-4 bg-slate-50/70 hover:bg-slate-100/70 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-left border-b border-slate-200/80">
+                        <div class="flex items-center gap-3">
+                            <div class="p-2 rounded-xl bg-aaep-navy/5 text-aaep-navy shrink-0">
+                                <i data-lucide="${cat.icon}" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <h3 class="text-base font-bold text-slate-900">${cat.title}</h3>
+                                    <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-200/70 text-slate-700">
+                                        ${matchedSkills.length === cat.skills.length ? `${cat.skills.length} skills` : `${matchedSkills.length} of ${cat.skills.length} shown`}
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-2 mt-1.5" id="cat-stats-${cat.id}">
+                                    <div class="w-32 sm:w-44 h-2 bg-slate-200 rounded-full overflow-hidden flex">
+                                        <div class="bg-emerald-500 h-full transition-all" style="width: ${stats.greenPct}%"></div>
+                                        <div class="bg-amber-400 h-full transition-all" style="width: ${stats.amberPct}%"></div>
+                                        <div class="bg-rose-500 h-full transition-all" style="width: ${stats.redPct}%"></div>
+                                    </div>
+                                    <span class="text-[11px] font-medium text-slate-500">
+                                        ${stats.green}G · ${stats.amber}A · ${stats.red}R ${stats.avgLikert ? `| Avg: ${stats.avgLikert}/5` : ''}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 self-end sm:self-center">
+                            <span class="text-xs font-medium text-slate-500 hidden md:inline">
+                                ${stats.rated}/${cat.skills.length} calibrated
+                            </span>
+                            <i data-lucide="chevron-down" id="cat-chevron-${cat.id}"
+                                class="w-5 h-5 text-slate-400 transition-transform duration-200"
+                                style="transform: ${isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)'}"></i>
+                        </div>
+                    </button>
+
+                    <div id="cat-body-${cat.id}" class="${isCollapsed ? 'hidden' : ''} divide-y divide-slate-100">
+                        ${matchedSkills.map(item => renderSkillRowHTML(item.id, item.text, item.data)).join('')}
+                    </div>
+                </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            emptyState.classList.toggle('hidden', visibleSkillsTotal > 0);
+            document.getElementById('visibleCountLabel').textContent =
+                visibleSkillsTotal === 243 ? 'Showing all 243 skills' : `Showing ${visibleSkillsTotal} matching skills`;
+
+            lucide.createIcons();
+        }
+
+        function renderSkillRowHTML(skillId, skillText, data) {
+            const hasNote = data.note && data.note.trim().length > 0;
+            const borderAccent =
+                data.traffic === 'green' ? 'border-l-4 border-l-emerald-500 bg-emerald-50/15' :
+                data.traffic === 'amber' ? 'border-l-4 border-l-amber-400 bg-amber-50/20' :
+                data.traffic === 'red' ? 'border-l-4 border-l-rose-500 bg-rose-50/15' :
+                'border-l-4 border-l-transparent';
+
+            return `
+            <div id="skill-row-${skillId}" class="p-3.5 sm:p-4 transition-colors hover:bg-slate-50/80 ${borderAccent}">
+                <div class="flex flex-col gap-3">
+                    <div class="pr-1">
+                        <p class="text-sm font-medium text-slate-800 leading-snug">${escapeHTML(skillText)}</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-1 border-t border-slate-100">
+                        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" role="group" aria-label="Traffic Light Status">
+                            <button type="button" onclick="setTrafficLight('${skillId}', 'green')" title="Green: Confident / Independent"
+                                class="px-3 py-2 sm:px-2.5 sm:py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all shrink-0 ${
+                                    data.traffic === 'green' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                }">
+                                <span class="w-2.5 h-2.5 sm:w-2 sm:h-2 rounded-full ${data.traffic === 'green' ? 'bg-white' : 'bg-emerald-500'}"></span>
+                                <span>Green</span>
+                            </button>
+                            <button type="button" onclick="setTrafficLight('${skillId}', 'amber')" title="Amber: Needs Supervision"
+                                class="px-3 py-2 sm:px-2.5 sm:py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all shrink-0 ${
+                                    data.traffic === 'amber' ? 'bg-amber-500 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                }">
+                                <span class="w-2.5 h-2.5 sm:w-2 sm:h-2 rounded-full ${data.traffic === 'amber' ? 'bg-white' : 'bg-amber-500'}"></span>
+                                <span>Amber</span>
+                            </button>
+                            <button type="button" onclick="setTrafficLight('${skillId}', 'red')" title="Red: Observing / Needs Review"
+                                class="px-3 py-2 sm:px-2.5 sm:py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all shrink-0 ${
+                                    data.traffic === 'red' ? 'bg-rose-600 text-white shadow-xs' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                }">
+                                <span class="w-2.5 h-2.5 sm:w-2 sm:h-2 rounded-full ${data.traffic === 'red' ? 'bg-white' : 'bg-rose-500'}"></span>
+                                <span>Red</span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between sm:justify-end gap-2">
+                            <div class="inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/80" role="group" aria-label="Likert Scale 1 to 5">
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-1.5 hidden md:inline">Likert</span>
+                                ${[1, 2, 3, 4, 5].map(num => {
+                                    const isSelected = Number(data.likert) === num;
+                                    const likertTitles = {
+                                        1: '1 - Observing Only',
+                                        2: '2 - Assisted / Guided',
+                                        3: '3 - Direct Supervision',
+                                        4: '4 - Independent (Post-Visit Debrief)',
+                                        5: '5 - Mastery / Ready to Teach'
+                                    };
+                                    return `
+                                    <button type="button" onclick="setLikert('${skillId}', ${num})" title="${likertTitles[num]}"
+                                        class="w-8 h-8 sm:w-7 sm:h-7 rounded-lg text-xs font-bold transition-all flex items-center justify-center ${
+                                            isSelected ? 'bg-aaep-navy text-white shadow-xs' : 'text-slate-700 hover:bg-white'
+                                        }">
+                                        ${num}
+                                    </button>`;
+                                }).join('')}
+                            </div>
+
+                            <button type="button" onclick="toggleNoteDrawer('${skillId}')" id="note-btn-${skillId}"
+                                title="Log case reflection, date, or request targeted observation"
+                                class="inline-flex items-center gap-1.5 px-3 py-2 sm:px-2.5 sm:py-1.5 rounded-xl text-xs font-medium border transition-all shrink-0 ${
+                                    hasNote ? 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                                }">
+                                <i data-lucide="message-square-plus" class="w-4 h-4"></i>
+                                <span class="hidden xs:inline">${hasNote ? 'Evidence Logged' : 'Note'}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="note-drawer-${skillId}" class="${hasNote ? '' : 'hidden'} mt-3 pt-3 border-t border-slate-200/70">
+                    <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">
+                        Case Evidence / Debrief Reflection / Observation Request
+                    </label>
+                    <textarea rows="2" oninput="updateNote('${skillId}', this.value)"
+                        placeholder="e.g., 14/11/2026: Performed independently on clinical case; requesting debrief..."
+                        class="w-full text-xs sm:text-sm p-2.5 bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-800 placeholder:text-slate-400">${escapeHTML(data.note || '')}</textarea>
+                </div>
+            </div>
+            `;
+        }
+
+        function updateSkillRowUI(skillId) {
+            const row = document.getElementById(`skill-row-${skillId}`);
+            if (!row) return;
+            const [catId, idxStr] = skillId.split('__');
+            const cat = AAEP_SKILLS_DATA.find(c => c.id === catId);
+            if (!cat) return;
+            const skillText = cat.skills[Number(idxStr)];
+            const data = getSkillData(skillId);
+
+            const wasDrawerOpen = !document.getElementById(`note-drawer-${skillId}`).classList.contains('hidden');
+            const temp = document.createElement('div');
+            temp.innerHTML = renderSkillRowHTML(skillId, skillText, data).trim();
+            const newRow = temp.firstElementChild;
+            if (wasDrawerOpen) {
+                newRow.querySelector(`#note-drawer-${skillId}`).classList.remove('hidden');
+            }
+            row.replaceWith(newRow);
+            lucide.createIcons();
+        }
+
+        function updateSkillNoteIndicator(skillId) {
+            const btn = document.getElementById(`note-btn-${skillId}`);
+            if (!btn) return;
+            const data = getSkillData(skillId);
+            const hasNote = data.note && data.note.trim().length > 0;
+            btn.className = `inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium border transition-all ${
+                hasNote ? 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
+            }`;
+            btn.querySelector('span').textContent = hasNote ? 'Evidence Logged' : 'Note';
+        }
+
+        function getCategoryStats(cat) {
+            let green = 0, amber = 0, red = 0, rated = 0, likertSum = 0, likertCount = 0;
+            const total = cat.skills.length;
+            cat.skills.forEach((_, idx) => {
+                const d = getSkillData(getSkillId(cat.id, idx));
+                if (d.traffic === 'green') green++;
+                else if (d.traffic === 'amber') amber++;
+                else if (d.traffic === 'red') red++;
+
+                if (d.traffic !== 'unrated' || d.likert !== null) rated++;
+                if (d.likert !== null && d.likert !== undefined) {
+                    likertSum += Number(d.likert);
+                    likertCount++;
+                }
+            });
+            return {
+                total,
+                green,
+                amber,
+                red,
+                rated,
+                greenPct: total ? (green / total) * 100 : 0,
+                amberPct: total ? (amber / total) * 100 : 0,
+                redPct: total ? (red / total) * 100 : 0,
+                avgLikert: likertCount > 0 ? (likertSum / likertCount).toFixed(1) : null
+            };
+        }
+
+        function updateCategoryHeaderStats(catId) {
+            const cat = AAEP_SKILLS_DATA.find(c => c.id === catId);
+            const el = document.getElementById(`cat-stats-${catId}`);
+            if (!cat || !el) return;
+            const stats = getCategoryStats(cat);
+            el.innerHTML = `
+                <div class="w-32 sm:w-44 h-2 bg-slate-200 rounded-full overflow-hidden flex">
+                    <div class="bg-emerald-500 h-full transition-all" style="width: ${stats.greenPct}%"></div>
+                    <div class="bg-amber-400 h-full transition-all" style="width: ${stats.amberPct}%"></div>
+                    <div class="bg-rose-500 h-full transition-all" style="width: ${stats.redPct}%"></div>
+                </div>
+                <span class="text-[11px] font-medium text-slate-500">
+                    ${stats.green}G · ${stats.amber}A · ${stats.red}R ${stats.avgLikert ? `| Avg: ${stats.avgLikert}/5` : ''}
+                </span>
+            `;
+        }
+
+        function renderAnalytics() {
+            const container = document.getElementById('analyticsChartContainer');
+            let html = '';
+
+            AAEP_SKILLS_DATA.forEach(cat => {
+                const stats = getCategoryStats(cat);
+                const unratedPct = Math.max(0, 100 - (stats.greenPct + stats.amberPct + stats.redPct));
+
+                html += `
+                <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200/80">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="font-semibold text-sm text-slate-900">${cat.title}</span>
+                            <span class="text-xs text-slate-500">(${stats.total} benchmarks)</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-xs font-medium">
+                            <span class="text-emerald-700">${stats.green} Green</span>
+                            <span class="text-amber-700">${stats.amber} Amber</span>
+                            <span class="text-rose-700">${stats.red} Red</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 font-semibold">
+                                Mean Likert: ${stats.avgLikert ? `${stats.avgLikert} / 5.0` : 'N/A'}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-full h-4 bg-slate-200 rounded-lg overflow-hidden flex shadow-inner">
+                        ${stats.greenPct > 0 ? `<div class="bg-emerald-500 h-full flex items-center justify-center text-[10px] font-bold text-white" style="width: ${stats.greenPct}%">${stats.greenPct >= 8 ? Math.round(stats.greenPct) + '%' : ''}</div>` : ''}
+                        ${stats.amberPct > 0 ? `<div class="bg-amber-400 h-full flex items-center justify-center text-[10px] font-bold text-slate-900" style="width: ${stats.amberPct}%">${stats.amberPct >= 8 ? Math.round(stats.amberPct) + '%' : ''}</div>` : ''}
+                        ${stats.redPct > 0 ? `<div class="bg-rose-500 h-full flex items-center justify-center text-[10px] font-bold text-white" style="width: ${stats.redPct}%">${stats.redPct >= 8 ? Math.round(stats.redPct) + '%' : ''}</div>` : ''}
+                        ${unratedPct > 0 ? `<div class="bg-slate-200 h-full" style="width: ${unratedPct}%"></div>` : ''}
+                    </div>
+                </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateReportMeta() {
+            document.getElementById('reportClinician').textContent = appState.meta.clinician || 'Heather';
+            document.getElementById('reportMentor').textContent = appState.meta.mentor || 'Ryan';
+            document.getElementById('reportDate').textContent = appState.meta.date || new Date().toISOString().split('T')[0];
+        }
+
+        function renderReportView() {
+            updateReportMeta();
+            const scope = document.getElementById('reportScopeFilter').value;
+            const tbody = document.getElementById('reportTableBody');
+            let rowsHTML = '';
+
+            AAEP_SKILLS_DATA.forEach(cat => {
+                cat.skills.forEach((skillText, idx) => {
+                    const id = getSkillId(cat.id, idx);
+                    const d = getSkillData(id);
+                    const hasNote = d.note && d.note.trim().length > 0;
+                    const isRated = d.traffic !== 'unrated' || d.likert !== null;
+
+                    if (scope === 'active' && !isRated && !hasNote) return;
+                    if (scope === 'amber-red' && d.traffic !== 'amber' && d.traffic !== 'red') return;
+
+                    const badge =
+                        d.traffic === 'green' ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>Green</span>` :
+                        d.traffic === 'amber' ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800"><span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>Amber</span>` :
+                        d.traffic === 'red' ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-800"><span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>Red</span>` :
+                        `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-500">Unrated</span>`;
+
+                    rowsHTML += `
+                    <tr class="hover:bg-slate-50/70 print-break-inside-avoid">
+                        <td class="py-3 px-4 text-xs font-semibold text-slate-600 align-top whitespace-nowrap">${cat.title.replace(/^\d+\.\s*/, '')}</td>
+                        <td class="py-3 px-4 text-xs sm:text-sm text-slate-800 align-top">${escapeHTML(skillText)}</td>
+                        <td class="py-3 px-4 align-top">${badge}</td>
+                        <td class="py-3 px-4 text-center text-xs font-bold text-slate-700 align-top">${d.likert ? `${d.likert} / 5` : '—'}</td>
+                        <td class="py-3 px-4 text-xs text-slate-600 align-top">${hasNote ? escapeHTML(d.note) : '<span class="text-slate-400 italic">No notes logged</span>'}</td>
+                    </tr>
+                    `;
+                });
+            });
+
+            if (!rowsHTML) {
+                rowsHTML = `
+                <tr>
+                    <td colspan="5" class="py-8 px-4 text-center text-sm text-slate-500">
+                        No skills match the selected report filter yet.
+                    </td>
+                </tr>`;
+            }
+
+            tbody.innerHTML = rowsHTML;
+        }
+
+        function copySummaryToClipboard() {
+            const clinician = appState.meta.clinician || 'Heather';
+            const mentor = appState.meta.mentor || 'Ryan';
+            const date = appState.meta.date || '';
+
+            let lines = [
+                `AAEP EQUINE CLINICAL SKILLS COMPETENCY SUMMARY`,
+                `Clinician: ${clinician} | Mentor: ${mentor} | Date: ${date}`,
+                `------------------------------------------------------------`
+            ];
+
+            let count = 0;
+            AAEP_SKILLS_DATA.forEach(cat => {
+                cat.skills.forEach((skillText, idx) => {
+                    const d = getSkillData(getSkillId(cat.id, idx));
+                    const hasNote = d.note && d.note.trim().length > 0;
+                    if (d.traffic !== 'unrated' || d.likert !== null || hasNote) {
+                        count++;
+                        const statusStr = d.traffic.toUpperCase();
+                        const likertStr = d.likert ? `Likert ${d.likert}/5` : 'Unscored';
+                        lines.push(`[${statusStr} | ${likertStr}] (${cat.title.replace(/^\d+\.\s*/, '')}) ${skillText}`);
+                        if (hasNote) lines.push(`   -> Evidence/Note: ${d.note.trim()}`);
+                    }
+                });
+            });
+
+            if (count === 0) lines.push('No calibrated skills logged yet.');
+
+            const textArea = document.createElement('textarea');
+            textArea.value = lines.join('\n');
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Competency summary copied to clipboard!', 'success');
+            } catch (err) {
+                showToast('Could not copy automatically—please use Print / Save PDF.', 'error');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function exportCSV() {
+            const headers = ['Category', 'AAEP Clinical Skill', 'Traffic Light Status', 'Likert Score (1-5)', 'Case Reflection / Debrief Notes'];
+            const rows = [headers];
+
+            AAEP_SKILLS_DATA.forEach(cat => {
+                cat.skills.forEach((skillText, idx) => {
+                    const d = getSkillData(getSkillId(cat.id, idx));
+                    rows.push([
+                        cat.title,
+                        skillText,
+                        d.traffic === 'unrated' ? 'Unrated' : d.traffic.toUpperCase(),
+                        d.likert || '',
+                        (d.note || '').replace(/\r?\n/g, ' ')
+                    ]);
+                });
+            });
+
+            const csvContent = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const safeName = (appState.meta.clinician || 'Heather').replace(/[^a-z0-9]/gi, '_');
+            link.href = url;
+            link.download = `AAEP_Competency_Checklist_${safeName}_${appState.meta.date}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            showToast('CSV competency spreadsheet exported.', 'success');
+        }
+
+        function exportJSON() {
+            const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const safeName = (appState.meta.clinician || 'Heather').replace(/[^a-z0-9]/gi, '_');
+            link.href = url;
+            link.download = `AAEP_Checklist_Backup_${safeName}_${appState.meta.date}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            showToast('JSON backup saved.', 'success');
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed && typeof parsed === 'object' && parsed.skills) {
+                        appState = {
+                            meta: parsed.meta || appState.meta,
+                            skills: parsed.skills || {},
+                            collapsedCategories: parsed.collapsedCategories || {}
+                        };
+                        saveState();
+                        bindMetaInputs();
+                        renderAll();
+                        showToast('Checklist data restored successfully!', 'success');
+                    } else {
+                        showToast('Invalid backup file format.', 'error');
+                    }
+                } catch (err) {
+                    showToast('Error reading JSON backup file.', 'error');
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        function loadDemoSample() {
+            const sampleEntries = {
+                'medical-knowledge__0': { traffic: 'green', likert: 5, note: 'Routinely gather thorough client histories independently on ambulatory calls.' },
+                'medical-knowledge__3': { traffic: 'green', likert: 4, note: 'Confident interpreting CBC/SAA/lactate.' },
+                'basic-examinations__0': { traffic: 'green', likert: 5, note: 'Completed 40+ ambulatory wellness & acute physical exams.' },
+                'basic-examinations__5': { traffic: 'amber', likert: 3, note: 'Performed forelimb RLP twice; requesting observation on hindlimb.' },
+                'colic__0': { traffic: 'green', likert: 4, note: 'Managed 5 medical colic cases end-to-end.' },
+                'colic__5': { traffic: 'amber', likert: 3, note: 'Practiced FLASH windows; requesting guided review.' },
+                'colic__7': { traffic: 'red', likert: 2, note: 'Observed 2 belly taps; requesting supervised hands-on.' },
+                'dentistry__5': { traffic: 'amber', likert: 3, note: 'Extracted loose deciduous caps; requesting supervision for wolf teeth.' }
+            };
+
+            appState.skills = { ...appState.skills, ...sampleEntries };
+            saveState();
+            renderAll();
+            showToast('Sample clinical progress loaded!', 'success');
+        }
+
+        function openResetModal() {
+            document.getElementById('resetModal').classList.remove('hidden');
+        }
+        function closeResetModal() {
+            document.getElementById('resetModal').classList.add('hidden');
+        }
+        function confirmReset() {
+            appState.skills = {};
+            appState.collapsedCategories = {};
+            saveState();
+            closeResetModal();
+            resetFilters();
+            renderAll();
+            showToast('All checklist ratings and notes have been cleared.', 'info');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgClass =
+                type === 'success' ? 'bg-emerald-900 border-emerald-700 text-emerald-50' :
+                type === 'error' ? 'bg-rose-900 border-rose-700 text-rose-50' :
+                'bg-slate-900 border-slate-700 text-white';
+
+            toast.className = `pointer-events-auto px-4 py-3 rounded-xl border shadow-lg text-xs sm:text-sm font-medium flex items-center gap-2.5 transition-all duration-300 ${bgClass}`;
+            toast.innerHTML = `<span>${escapeHTML(message)}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(8px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+</html>
+```
